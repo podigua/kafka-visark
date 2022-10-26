@@ -64,12 +64,6 @@ const get = async () => {
                 reject(err);
             } else {
                 if (doc) {
-                    if (!doc.kafka.authenticationTimeout) {
-                        doc.kafka.authenticationTimeout = 10000;
-                    }
-                    if (!doc.kafka.reauthenticationThreshold) {
-                        doc.kafka.reauthenticationThreshold = 10000;
-                    }
                     resolve(doc);
                 } else {
                     resolve(setting());
