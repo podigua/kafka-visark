@@ -6,7 +6,7 @@ import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 import path from "path";
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
-require('./utils/datastrore')
+require('./utils/datastrore/index')
 require('./utils/notification')
 const {setWindow} = require('./utils/dialog')
 require('./utils/export')

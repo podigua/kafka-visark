@@ -1,4 +1,10 @@
 export class DateUtils {
+    /**
+     * 格式化
+     * @param timestamp 时间戳
+     * @param fmt 格式,默认 yyyy-MM-dd HH:mm:ss
+     * @returns {string|null}
+     */
     static format(timestamp, fmt) {
         if (!timestamp) return null;
         let date = new Date();

@@ -14,10 +14,9 @@
    2. 分配情况
 
 # Wiki
-[github](https://github.com/podigua/kafka-visark/wiki)
-[gitee](https://gitee.com/podigua/kafka-visark/wikis)
-## 运行+打包
+[wiki](https://gitee.com/podigua/kafka-visark/wikis)
 
+## 运行+打包
 
 ### 运行
 ```
