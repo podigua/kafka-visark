@@ -9,8 +9,12 @@ module.exports = {
     }, pluginOptions: {
         electronBuilder: {
             preload: './src/preload.js', builderOptions: {
+                // "publish": {
+                //     provider: "generic", url: "https://kafka-visark-1300718879.cos.ap-nanjing.myqcloud.com/latest"
+                // },
                 "appId": "com.podigua.kafka",
                 "productName": "Kafka Visark",
+                "artifactName": "Kafka Visark-${os}-${version}.${ext}",
                 "copyright": "Copyright © 2022",
                 "directories": {
                     "output": "./dist_electron"
@@ -23,7 +27,11 @@ module.exports = {
                     }]
                 },
                 "mac": {
-                    "entitlements": "entitlements.mac.plist", "icon": "build/icons/icon.icns", "darkModeSupport": false
+                    "category": "https://podigua.gitee.io/kafka-visark",
+                    "identity": "podigua",
+                    "hardenedRuntime": true,
+                    "gatekeeperAssess": false,
+                    "icon": "build/icons/icon.icns", "darkModeSupport": false
 
                 },
                 "win": {
@@ -40,7 +48,7 @@ module.exports = {
                     "installerHeaderIcon": "build/icons/icon.ico", // 安装时头部图标
                     "createDesktopShortcut": true,
                     "createStartMenuShortcut": true,
-                    "shortcutName": "Kafka Visark",
+                    "shortcutName": "Kafka-Visark",
                 },
             }
         }

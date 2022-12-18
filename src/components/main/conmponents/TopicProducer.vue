@@ -35,7 +35,7 @@ export default {
     return {
       loading: false,
       form: {
-        random: true,
+        random: false,
         partition: null,
         key: "",
         value: ""

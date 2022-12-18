@@ -1,14 +1,30 @@
 <template>
   <div id="app">
     <Home></Home>
+    <Update ref="update"></Update>
   </div>
 </template>
 
 <script>
 import Home from './views/Home'
+import Update from "@/components/Update";
 
 export default {
-  name: 'App', components: {Home}, created() {
+  name: 'App', components: {Update, Home}, created() {
+    window.api.updateAvailable(() => {
+      this.$refs.update.show();
+    })
+    window.api.downloadProgress(data => {
+      this.$refs.update.refresh(data);
+    })
+    window.api.updateDownloaded(() => {
+      this.$refs.update.hide();
+    });
+    try {
+      window.api.checkUpdate();
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 </script>
@@ -49,7 +65,8 @@ body {
 span {
   vertical-align: middle;
 }
-.el-dialog__body{
+
+.el-dialog__body {
   padding: 10px 20px;
 }
 </style>

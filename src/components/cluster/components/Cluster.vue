@@ -111,15 +111,15 @@
           @row-dblclick="connect"
           @row-contextmenu="onRowContextMenu"
       >
-        <el-table-column label="名称" prop="name" header-align="center">
+        <el-table-column label="名称" prop="name" header-align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             <span class="iconfont icon-folder" v-if="scope.row.type==='folder'"></span>
             <span class="iconfont icon-connect" v-if="scope.row.type==='broker'"></span>
             <span style="margin-left: 5px;vertical-align: middle;">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="地址" prop="brokers" header-align="center"></el-table-column>
-        <el-table-column label="描述" prop="description" header-align="center"></el-table-column>
+        <el-table-column label="地址" prop="brokers" header-align="center"  show-overflow-tooltip></el-table-column>
+        <el-table-column label="描述" prop="description" header-align="center"  show-overflow-tooltip></el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
           <el-checkbox v-model="setting.autoOpenWindow" @change="onAutoOpenWindow" style="float: left">程序启动时打开此对话框</el-checkbox>

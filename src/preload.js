@@ -77,6 +77,20 @@ contextBridge.exposeInMainWorld('api', {
         return ipcRenderer.invoke('file.exists', filePath);
     }, showMessageBox(option) {
         return ipcRenderer.invoke('message.box', option);
+    }, updateAvailable(callback) {
+        ipcRenderer.on('update-available', (event) => {
+            callback();
+        })
+    }, downloadProgress(callback) {
+        ipcRenderer.on('download-progress', (event, data) => {
+            callback(data);
+        })
+    }, updateDownloaded(callback) {
+        ipcRenderer.on('update-downloaded', () => {
+            callback();
+        })
+    }, checkUpdate() {
+        return ipcRenderer.invoke('check-update');
     }
 })
 console.log("load preload success")

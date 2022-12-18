@@ -13,7 +13,7 @@
             label-width="140px"
         >
           <el-tabs v-model="tab" tab-position="left">
-            <el-tab-pane label="通用" name="universal">
+            <el-tab-pane label="通用" name="universal" style="min-height: 250px;">
               <el-form-item
                   label-width="80px"
                   label="保存路径"

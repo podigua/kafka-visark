@@ -10,6 +10,8 @@ require('./utils/datastrore/index')
 require('./utils/notification')
 const {setWindow} = require('./utils/dialog')
 require('./utils/export')
+//import updater from "./updater"
+
 protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: {secure: true, standard: true}}])
 
 require('./utils/kafka')
@@ -67,7 +69,8 @@ app.on('ready', async () => {
             console.error('Vue Devtools failed to install:', e.toString())
         }
     }
-    createWindow()
+    createWindow();
+    // updater.setUpdateWindow(window);
     window.on('close', (e) => {
         if (willQuitApp) {
             window = null;

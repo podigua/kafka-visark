@@ -7,11 +7,11 @@
       :visible.sync="visible"
   >
     <el-table :data="list" stripe border>
-      <el-table-column prop="id" align="center" label="id"></el-table-column>
-      <el-table-column prop="leader" width="150px" align="center" label="leader"></el-table-column>
-      <el-table-column prop="low" align="center" label="low"></el-table-column>
-      <el-table-column prop="high" align="center" label="high"></el-table-column>
-      <el-table-column prop="offset" align="center" label="offset"></el-table-column>
+      <el-table-column prop="id" align="center" label="id" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="leader" width="150px" align="center" label="leader" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="low" align="center" label="low" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="high" align="center" label="high" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="offset" align="center" label="offset" show-overflow-tooltip></el-table-column>
     </el-table>
 
     <span slot="footer" class="dialog-footer">

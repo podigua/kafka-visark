@@ -8,18 +8,18 @@
   >
     <div style="margin-bottom: 5px;"><b>备注：修改偏移量时,消费者组必须没有正在运行的实例</b></div>
     <el-table :data="list" stripe border>
-      <el-table-column prop="topic" align="center" label="topic"></el-table-column>
-      <el-table-column prop="partition" align="center" label="partition"></el-table-column>
-      <el-table-column prop="low" align="center" label="low"></el-table-column>
-      <el-table-column prop="high" align="center" label="high"></el-table-column>
-      <el-table-column prop="offset" align="center" label="offset">
+      <el-table-column prop="topic" align="center" label="topic" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="partition" align="center" label="partition" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="low" align="center" label="low" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="high" align="center" label="high" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="offset" align="center" label="offset" show-overflow-tooltip>
         <template slot-scope="scope">
           <span v-if="scope.$index!==index">{{ scope.row.offset }}</span>
           <el-input-number v-else v-model="scope.row.current" controls-position="right" :max="scope.row.high" style="width: 100%"
                            :min="scope.row.low"></el-input-number>
         </template>
       </el-table-column>
-      <el-table-column prop="action" align="center" label="操作" width="145">
+      <el-table-column prop="action" align="center" label="操作" width="145" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="primary" v-if="index!==scope.$index" @click="edit(scope.$index)">编辑</el-button>
           <el-button-group v-else>
