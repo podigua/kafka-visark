@@ -55,6 +55,8 @@ contextBridge.exposeInMainWorld('api', {
         return ipcRenderer.invoke("message.query.start.size", option);
     }, messageByEndAndSize: (option) => {
         return ipcRenderer.invoke("message.query.end.size", option);
+    }, messageByOffset: (option) => {
+        return ipcRenderer.invoke("message.query.offset", option);
     }, sendMessage: (id, message) => {
         return ipcRenderer.invoke("message.send", id, message);
     }, notice: (option) => {

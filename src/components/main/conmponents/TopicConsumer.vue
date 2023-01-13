@@ -4,6 +4,7 @@
       <el-form-item label="类型" prop="type">
         <el-select v-model="form.type" @change="onSelectQueryChange">
           <el-option :value="1" label="按数量"></el-option>
+          <el-option :value="5" label="按偏移量"></el-option>
           <el-option :value="2" label="按时间"></el-option>
           <el-option :value="3" label="开始时间+数量"></el-option>
           <el-option :value="4" label="结束时间+数量"></el-option>
@@ -29,7 +30,7 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="数量" prop="size" v-if="form.type!==2">
+      <el-form-item label="数量" prop="size" v-if="form.type!==2 && form.type!==5">
         <el-input-number :min="1" controls-position="right" v-model="form.size"></el-input-number>
       </el-form-item>
       <el-form-item label="结束时间" prop="end" v-if="form.type===4">
@@ -45,6 +46,12 @@
           <el-option :value="true" label="是"></el-option>
           <el-option :value="false" label="否"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="开始位置" prop="startOffset" v-if="form.type===5">
+        <el-input-number v-model="form.startOffset" controls-position="right"></el-input-number>
+      </el-form-item>
+      <el-form-item label="结束位置" prop="endOffset" v-if="form.type===5">
+        <el-input-number v-model="form.endOffset" controls-position="right"></el-input-number>
       </el-form-item>
       <el-form-item style="float: right">
         <el-input v-model="filterText" placeholder="过滤..." clearable>
@@ -224,6 +231,8 @@ export default {
         fromBeginning: false,
         start: null,
         end: null,
+        startOffset: null,
+        endOffset: null,
         times: [],
       },
       formRule: {
@@ -238,6 +247,12 @@ export default {
         ],
         times: [
           {required: true, type: "array", message: "时间范围为必填项", trigger: ["blur", "change"]},
+        ],
+        startOffset: [
+          {required: true, type: "number", message: "开始位置为必填项", trigger: ["blur", "change"]},
+        ],
+        endOffset: [
+          {required: true, type: "number", message: "结束位置为必填项", trigger: ["blur", "change"]},
         ]
       },
       list: [],
@@ -367,6 +382,12 @@ export default {
     search() {
       this.$refs.formRef.validate((v) => {
         if (v) {
+          if (this.form.type === 5) {
+            if (this.form.endOffset < this.form.startOffset) {
+              this.$message.error("开始位置不能大于结束位置");
+              return;
+            }
+          }
           this.querying = true;
           this.clear();
           switch (this.form.type) {
@@ -381,6 +402,9 @@ export default {
               break
             case QueryType.END_SIZE:
               this.searchPromise = this.queryByEndAndSize();
+              break
+            case QueryType.OFFSET:
+              this.searchPromise = this.queryByOffset();
               break
           }
           this.loading = true;
@@ -407,6 +431,14 @@ export default {
         topic: this.topic,
         end: this.form.end.getTime(),
         size: this.form.size,
+      })
+    },
+    queryByOffset() {
+      return window.api.messageByOffset({
+        id: this.id,
+        topic: this.topic,
+        startOffset: this.form.startOffset,
+        endOffset: this.form.endOffset,
       })
     },
     queryByStartAndSize() {

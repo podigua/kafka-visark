@@ -409,6 +409,41 @@ const getGroupId = () => {
     return "kafka-visark" + uuidv4();
 }
 /**
+ * 按照偏移量查询
+ * @param id
+ * @param topic
+ * @param startOffset
+ * @param endOffset
+ * @returns {Promise<unknown>}
+ */
+const getRecordByOffset = async (id, topic, startOffset, endOffset) => {
+    console.log(id, topic, startOffset, endOffset)
+    let partitions = await fetchTopicOffsets(id, topic);
+    console.log("partitions:", partitions)
+    let records = [];
+    for (const partition of partitions) {
+        let start = Number(partition.low);
+        let high = Number(partition.high);
+        let end = high - 1;
+        if (start !== high) {
+            if (startOffset > start) {
+                start = startOffset;
+            }
+            if (endOffset < end) {
+                end = endOffset;
+            }
+            records.push(new PartitionSizeRecord(topic, partition.partition, start, end))
+        }
+    }
+    console.log("records:", records);
+    if (records.length === 0) {
+        return new Promise((resolve) => {
+            resolve([]);
+        })
+    }
+    return await getRecord(id, topic, records);
+}
+/**
  * 根据结束时间+数量查询
  * @param id
  * @param topic
@@ -417,7 +452,7 @@ const getGroupId = () => {
  * @returns {Promise<void>}
  */
 const getRecordByEndAndSize = async (id, topic, time, size) => {
-    console.log("根据关闭时间与大小查询", id, topic, time, size)
+    console.log("根据关闭时间与大小查询", DateUtils.now(), id, topic, time, size)
     let endPartitions = await fetchTopicOffsetsByTimestamp(id, topic, time);
     let partitions = await fetchTopicOffsets(id, topic)
     let records = [];
@@ -488,6 +523,7 @@ const getRecordByStartAndSize = async (id, topic, time, size) => {
  * @returns {Promise<void>}
  */
 const getRecordByTime = async (id, topic, startTime, endTime) => {
+    console.log("byTime:", id, topic, startTime, endTime);
     let startPartitions = await fetchTopicOffsetsByTimestamp(id, topic, startTime);
     let endPartitions = await fetchTopicOffsetsByTimestamp(id, topic, endTime);
     let partitions = await fetchTopicOffsets(id, topic);
@@ -514,6 +550,7 @@ const getRecordByTime = async (id, topic, startTime, endTime) => {
             }
         }
     }
+    console.log("records:", records)
     if (records.length === 0) {
         return new Promise((resolve) => {
             resolve([]);
@@ -573,13 +610,16 @@ const getRecord = async (id, topic, records) => {
     let admin = broker.admin;
     let consumer = kafka.consumer({groupId});
     await consumer.connect();
-    await consumer.subscribe({topic: topic, fromBeginning: false})
+    await consumer.subscribe({topic: topic})
     const run = async (callback) => {
         await consumer.run({
-            autoCommit: true, eachMessage: async ({topic, partition, message}) => {
-                await consumer.commitOffsets([{
-                    topic: topic, partition: partition, offset: Number(message.offset) + 1
-                }])
+            autoCommit: true,
+            autoCommitInterval: 5000,
+            autoCommitThreshold: 100,
+            eachMessage: async ({topic, partition, message}) => {
+                //await consumer.commitOffsets([{
+                //    topic: topic, partition: partition, offset: Number(message.offset) + 1
+                //}])
                 let record = records.find(p => p.partition === partition);
                 if (record && record.running(message.offset)) {
                     let result = buildMessage(id, topic, partition, message);
@@ -832,6 +872,12 @@ ipcMain.handle('message.query.start.size', async (event, option) => {
  */
 ipcMain.handle('message.query.end.size', async (event, option) => {
     return await getRecordByEndAndSize(option.id, option.topic, option.end, option.size)
+})
+/**
+ * 按偏移量
+ */
+ipcMain.handle('message.query.offset', async (event, option) => {
+    return await getRecordByOffset(option.id, option.topic, option.startOffset, option.endOffset)
 })
 /**
  * 发送消息

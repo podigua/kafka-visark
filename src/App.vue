@@ -21,7 +21,7 @@ export default {
       this.$refs.update.hide();
     });
     try {
-      window.api.checkUpdate();
+      //window.api.checkUpdate();
     } catch (e) {
       console.log(e);
     }

@@ -25,4 +25,12 @@ export class DateUtils {
         }
         return format;
     }
+
+    /**
+     * 现在
+     * @returns {string|null}
+     */
+    static now() {
+       return DateUtils.format(new Date())
+    }
 }
