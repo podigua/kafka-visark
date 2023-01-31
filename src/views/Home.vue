@@ -143,6 +143,7 @@ export default {
       }
     },
     push(row) {
+      console.log(row);
       let node = this.rows.find(data => data.uuid === row.uuid);
       if (!node) {
         this.rows.push({

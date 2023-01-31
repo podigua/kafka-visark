@@ -2,7 +2,7 @@
   <div :style="{ height: mainHeight}">
     <el-tabs>
       <el-tab-pane label="消费">
-        <TopicConsumer ref="concumer" :id="id" :topic="topic" :partitions="partitions"></TopicConsumer>
+        <TopicConsumer ref="consumer" :id="id" :topic="topic" :partitions="partitions"></TopicConsumer>
       </el-tab-pane>
       <el-tab-pane label="生产">
         <TopicProducer :id="id" :topic="topic" :partitions="partitions"></TopicProducer>
@@ -26,7 +26,7 @@ export default {
   },
   methods:{
     shutdown(){
-      return  this.$refs.concumer.shutdown()
+      return  this.$refs.consumer.shutdown()
     }
   },
   computed: {

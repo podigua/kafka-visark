@@ -426,11 +426,15 @@ const getRecordByOffset = async (id, topic, startOffset, endOffset) => {
         let high = Number(partition.high);
         let end = high - 1;
         if (start !== high) {
-            if (startOffset > start) {
-                start = startOffset;
-            }
-            if (endOffset < end) {
-                end = endOffset;
+            if (startOffset >= end || endOffset <= start) {
+                end = start;
+            } else {
+                if (startOffset > start) {
+                    start = startOffset;
+                }
+                if (endOffset < end) {
+                    end = endOffset;
+                }
             }
             records.push(new PartitionSizeRecord(topic, partition.partition, start, end))
         }
